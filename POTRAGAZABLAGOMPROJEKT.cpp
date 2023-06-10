@@ -2,7 +2,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include <string>
-#include <time.h> // Added to seed the random number generator
+#include <time.h> // dodano za rand funkciju
 using namespace std;
 
 const int n = 10;
@@ -110,44 +110,44 @@ int pomakniIgraca(int igracevPotez, char polje[n][n], int iPozicija, int jPozici
     }
 }
 
-void generateRandomLevel(char polje[n][n])
+void Nasumicnarazina(char polje[n][n])
 {
-    // Seed the random number generator
+    // Funkcija za generiranje nasumicne razine
     srand(time(0));
 
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
         {
-            // Generate random obstacles and treasures
-            int randomNum = rand() % 30; // Generates a random number between 0 and 9
+            // Generiranje nasumicnih prepreka i blaga
+            int randomNum = rand() % 30; // Generira nasumican broj izmedu 0 i 29
             if (randomNum < 3)
-                polje[i][j] = 'X'; // Obstacle
+                polje[i][j] = 'X'; // Prepreka
             else if (randomNum == 9)
-                polje[i][j] = '*'; // Treasure
+                polje[i][j] = '*'; // Blago
             else
-                polje[i][j] = '-'; // Empty space
+                polje[i][j] = '-'; // Prazan prostor
 
         }
     }
 }
 
-void savePoljeToFile(char polje[n][n])
+void Tekstualnadatoteka(char polje[n][n])
 {
-    ofstream outputFile("polje.txt"); // Create an output file stream
+    ofstream datoteka("polje.txt"); // Kreira tekstualnu datoteku
 
-    if (outputFile.is_open())
+    if (datoteka.is_open())
     {
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < n; j++)
             {
-                outputFile << polje[i][j] << " ";
+                datoteka << polje[i][j] << " ";
             }
-            outputFile << endl;
+            datoteka << endl;
         }
 
-        outputFile.close();
+        datoteka.close();
         cout << "Polje je uspješno spremljeno u datoteku polje.txt" << endl;
     }
     else
@@ -156,18 +156,18 @@ void savePoljeToFile(char polje[n][n])
     }
 }
 
-void savePoljeToBinary(char polje[n][n])
+void Binarnadatoteka(char polje[n][n])
 {
-    ofstream outputFile("polje.bin", ios::binary | ios::out); // Create an output file stream in binary mode
+    ofstream datoteka1("polje.bin", ios::binary | ios::out); // Kreiraj binarnu datoteku
 
-    if (outputFile.is_open())
+    if (datoteka1.is_open())
     {
         for (int i = 0; i < n; i++)
         {
-            outputFile.write(reinterpret_cast<char*>(polje[i]), n); // Write each row as a binary block
+            datoteka1.write(reinterpret_cast<char*>(polje[i]), n); // Zapisuje svaki red binarno
         }
 
-        outputFile.close();
+        datoteka1.close();
         cout << "Polje je uspješno spremljeno u datoteku polje.bin" << endl;
     }
     else
@@ -187,7 +187,7 @@ int main()
     getline(cin, prezime);
 
     string datoteka = "ime_prezime.txt";
-    ofstream datotekaIzlaz(datoteka, ios::app); // Otvori datoteku u naèinu dodavanja (append mode)
+    ofstream datotekaIzlaz(datoteka, ios::app); // Otvori datoteku u naèinu dodavanja 
 
     if (datotekaIzlaz.is_open()) {
         datotekaIzlaz << "Ime: " << ime << endl;
@@ -201,8 +201,8 @@ int main()
     }
     char polje[n][n];
 
-    // Generate a random level
-    generateRandomLevel(polje);
+    // Generira nasumicnu razinu
+    Nasumicnarazina(polje);
 
     polje[iPozicijaIgraca][jPozicijaIgraca] = 'P';
     polje[9][9] = 'B';
@@ -222,8 +222,8 @@ int main()
         ispravanPotez = pomakniIgraca(igracevPotez, polje, iPozicijaIgraca, jPozicijaIgraca);
     }
 
-    savePoljeToFile(polje); // Save the field to a file
-    savePoljeToBinary(polje); //Save the field to a binary file
+    Tekstualnadatoteka(polje); // Spremi polje u tekstualnu datoteku
+    Binarnadatoteka(polje); //Spremi polje u binarnu datoteku
 
     return 0;
 } 
